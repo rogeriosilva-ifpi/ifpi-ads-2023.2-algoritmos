@@ -1,0 +1,175 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Mariana</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;500&family=Roboto:wght@100;300;400;700&display=swap" rel="stylesheet">
+  <style>
+
+    body{
+      font-family: 'Montserrat','Lucida Sans', 'Lucida Sans Regular', 'Lucida Grande', 'Lucida Sans Unicode', Geneva, Verdana, sans-serif;
+
+      background: #0F2027;  /* fallback for old browsers */
+
+      color: white;
+    }
+
+    img{
+      width: 150px;
+    }
+
+    h1{
+      /* border: 2px solid greenyellow; */
+      padding: 10px;
+      font-size: 1.5rem;
+    }
+
+    div{
+      display: flex;
+      flex-direction: column;
+      margin-bottom: 1.6rem;
+    }
+
+    #botoes{
+      /* background-color: aqua; */
+      /* border: 2px dotted blue; */
+      /* width: 300px; */
+      flex-direction: row;
+      justify-content: space-between;
+      flex-wrap: wrap;
+      gap: 1rem;
+    }
+
+    #botoes input{
+      min-width: 300px;
+      flex: 1;
+      height: 50px;
+      border-radius: 10px;
+      font-size: 1.9rem;
+    }
+
+    #botoes input:hover{
+      background-color: cadetblue;
+      font-size: 2rem;
+    }
+
+    header{
+      display: flex;
+      flex-direction: row;
+      justify-content: center;
+    }
+
+    input{
+      background-color: #0F2027;
+      color: white;
+      border-bottom: 1px solid greenyellow;
+      border-right: 1px solid greenyellow;
+      font-size: 1.2rem;
+    }
+
+    label{
+      color: cadetblue;
+      /* background-color: blanchedalmond; */
+    }
+  </style>
+
+  <!-- <script src="viagem_motor.js" defer></script> -->
+
+</head>
+<body>
+  <header>
+    <img src="imagens/posto.png" alt="Frentista em um Posto de Gasolina">
+    <h1>Cálculo de Gasto com Combustível na Viagem</h1>
+  </header>
+  <form id="formulario" action="#">
+    <!-- <div>
+      <label for="">Destino:</label>
+      <input type="text" placeholder="Vai viajar para onde?">
+    </div> -->
+
+    <div>
+      <label for="">Distância(Km)</label>
+      <input id="cx-distancia" type="number" placeholder="KM: Ida e Volta">
+    </div>
+
+    <div>
+      <label for="">Motor Elétrico(%)
+      </label>
+      <input id="cx-eletrico"  type="number" placeholder="Uso de Motor Elétrico(%)">
+    </div>
+
+    <div>
+      <label for="">Preço Gasolina(R$/L)
+      </label>
+      <input id="cx-preco-gas"  type="number" step="0.01" placeholder="Preço L Gasolina(R$)">
+    </div>
+
+    <div>
+      <label for="">Preço Álcool(R$/L)
+      </label>
+      <input id="cx-preco-alc"  type="number" step="0.01" placeholder="Preço L Álcool(R$)">
+    </div>
+
+    <div>
+      <label for="">Rendimento Gasolina(Km/L)
+      </label>
+      <input id="cx-rend-gas"  type="number" step="0.01" placeholder="Rendimento 1L Gasolina">
+    </div>
+
+    <div>
+      <label for="">Rendimento Álcool(Km/L)
+      </label>
+      <input id="cx-rend-alc"  type="number" step="0.01" placeholder="Rendimento 1L Álcool(Km)">
+    </div>
+
+    <div id="botoes">
+      <input type="reset" value="Limpar">
+      <input id="btn-calcular" onclick="clique_botao_calcular()" type="submit" value="Calcular Gastos">
+    </div>
+
+  </form>
+
+  <script>
+    function clique_botao_calcular(){
+      const cx_distancia = document.getElementById('cx-distancia')
+      const cx_eletrico = document.getElementById('cx-eletrico')
+      const cx_preco_gas = document.getElementById('cx-preco-gas')
+      const cx_preco_alc = document.getElementById('cx-preco-alc')
+      const cx_rend_gas = document.getElementById('cx-rend-gas')
+      const cx_rend_alc = document.getElementById('cx-rend-alc')
+      
+      const distancia = Number(cx_distancia.value)
+      const perc_eletrico = Number(cx_eletrico.value)
+      const preco_gas = Number(cx_preco_gas.value)
+      const preco_alc = Number(cx_preco_alc.value)
+      const rend_gas = Number(cx_rend_gas.value)
+      const rend_alc = Number(cx_rend_alc.value)
+
+      // Distancia com Gas. ou Alcool.
+      const distancia_eletrico = distancia * (perc_eletrico/100)
+      const distancia_combustivel = distancia - distancia_eletrico
+
+      // Litros com Gas ou Alc.
+      const litros_gas = distancia_combustivel / rend_gas
+      const litros_alc = distancia_combustivel / rend_alc
+
+      // R$ com Gas. ou Alco
+      const gasto_gas = litros_gas * preco_gas
+      const gasto_alc = litros_alc * preco_alc
+
+      // Resultado
+      const resultado = `**** RESULTADO *****
+        \nLitros Gasolina: ${litros_gas.toFixed(1)}
+        \nLitros Álcool: ${litros_alc.toFixed(1)}
+        \nGasto Gasolina(R$): ${gasto_gas.toFixed(1)}
+        \nGasto Álcool(R$): ${gasto_alc.toFixed(1)}`
+
+      alert(resultado)
+  
+}
+  </script>
+</body>
+</html>
