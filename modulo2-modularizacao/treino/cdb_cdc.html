@@ -1,0 +1,135 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>CDB/CDC</title>
+  <style>
+    body{
+      background: black;
+      color: white;
+    }
+
+    /* id="resultado" */
+    #resultado{
+      color: greenyellow;
+    }
+  </style>
+</head>
+<body>
+  <header>
+    <h1>Simulador de CDB e CDC</h1>
+  </header>
+  <main>
+    <h2>Forneça os Dados</h2>
+
+    <form action="#" onsubmit="calcular_cdb_cdc()">
+      <label for="valor_cdb">Valor Investido CDB:</label>
+      <input id="valor_cdb" type="number" step="0.01" min="100">
+
+      <label for="taxa_cdb">Taxa CDB(a.a):</label>
+      <input id="taxa_cdb" 
+        placeholder="1.78"
+        type="number" step="0.01" 
+        min="0.01" max="20.00">
+
+      <label for="ano_venc_cdb">Ano Venc.(AAAA):</label>
+      <input id="ano_venc_cdb" type="number" 
+        min="2024" max="2030">
+
+      <label for="taxa_cdc">Taxa CDC(a.m):</label>
+      <input id="taxa_cdc" type="number" step="0.01" min="0.01" max="100">
+
+      <input type="submit" value="Calcular">
+    </form>
+
+    <h2>Resultado Simulação</h2>
+    <p id="resultado"></p>
+
+  </main>
+  <footer>
+    <p>Fim por fim feito por mim: Rogério Silva</p>
+  </footer>
+  <script>
+    // Código Javascript
+    function calcular_cdb_cdc(){
+
+      // ########### CDB ###########
+      const valor_cdb = obter_numero('valor_cdb')
+      const taxa_cdb = obter_numero('taxa_cdb')
+      const ano_venc_cdb = obter_numero('ano_venc_cdb')
+
+      const rendimento_cdb = calcular_rendimento_cdb(valor_cdb, taxa_cdb, ano_venc_cdb)
+      const valor_total_cdb = valor_cdb + rendimento_cdb
+
+      // ########## CDC ###########
+      const taxa_cdc = obter_numero('taxa_cdc')
+      const meses_cdc = (ano_venc_cdb - 2023)*12
+      const juros_cdc = calcular_juros_cdc(valor_cdb, taxa_cdc, meses_cdc)
+      const valor_total_cdc = valor_cdb + juros_cdc
+      const parcela_cdc = valor_total_cdc / meses_cdc
+
+      // Lucro 
+      const lucro_banco = juros_cdc - rendimento_cdb
+      
+
+      // ######### SAÍDA ##########
+      const resultado_simulacao = `
+      ****** CDB *******
+        Valor Investido: R$ ${valor_cdb}
+               Taxa a.a: ${taxa_cdb}%
+               Ano Venc: ${ano_venc_cdb}
+        -------------------------
+         Rendimento: ${rendimento_cdb.toFixed(2)}
+        Valor Total: ${valor_total_cdb.toFixed(2)}
+      
+      ****** CDC ********
+        Valor Emprestado: R$ ${valor_cdb}
+               Taxa a.m.: ${taxa_cdc}%
+                   Meses: ${meses_cdc}
+        ---------------------
+        Lucro do Banco(CDC): R$ ${juros_cdc.toFixed(2)}
+              Valor Total CDC: R$ ${valor_total_cdc.toFixed(2)}
+                      Parcela: ${meses_cdc}x de R$ ${parcela_cdc.toFixed(2)}
+      
+      ******* LUCRO BANCO *******
+               Captou: R$ ${valor_cdb} 
+        Rend. Cliente: R$ ${rendimento_cdb.toFixed(2)}
+            Lucro CDC: R$ ${juros_cdc.toFixed(2)}
+      ----------------------------
+      Lucro Líquido do Banco: R$ ${lucro_banco.toFixed(2)}
+        `
+      
+      // alert(resultado)
+      const elemento_resultado = document.getElementById('resultado')
+      elemento_resultado.innerText = resultado_simulacao
+    }
+
+    function calcular_rendimento_cdb(valor_cdb, taxa_cdb, ano_venc_cdb){
+      // juros compostos
+      const montante = valor_cdb*(1+taxa_cdb/100)**(ano_venc_cdb-2023)
+      const rendimento = montante - valor_cdb
+
+      return rendimento
+    }
+
+    function calcular_juros_cdc(valor, taxa, meses){
+      const montante = valor*(1+taxa/100)**meses
+      const juros = montante - valor
+      return juros
+    }
+
+
+    function obter_numero(elemento_id){
+      return Number(obter_valor(elemento_id))
+    }
+
+
+    function obter_valor(elemento_id){
+      const elemento = document.getElementById(elemento_id)
+      const valor = elemento.value
+      return valor
+    }
+  </script>
+</body>
+</html>

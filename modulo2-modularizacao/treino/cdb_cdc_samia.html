@@ -1,0 +1,184 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CDB_CDC</title>
+    <style>
+        body{
+            background-color:rgb(19, 40, 43);
+        }
+
+        img{
+            width: 220px;
+        }
+
+        h1{
+            color:rgb(255, 178, 228);
+            margin: 10px;
+            font-size: 1.5rem;
+            font-family: cursive;
+            width: 40%;
+            text-align: center;
+            padding: 10px;
+            border: 2px solid rgb(153, 255, 58);
+        }
+
+        #botoes{
+            flex-direction: row;
+            justify-content: space-between;
+            flex-wrap: wrap;
+            gap: 1rem;
+        }
+
+        #botoes input{
+            min-width: 200px;
+            color: rgb(19, 40, 43);
+            flex: 1;
+            height: 35px;
+            border-radius: 10px;
+            font-size: 1.5rem;
+            background-color:rgb(235, 162, 210);
+        }
+
+        input{
+            background-color: rgb(19, 40, 43);
+            color: white;
+            border-bottom: 2px solid rgb(255, 178, 228);
+            border-right: 2px solid rgb(255, 178, 228);
+            border-top: rgb(19, 40, 43);
+            font-size: 0.9rem;
+        }
+
+        header{
+            display: flex;
+            flex-direction: row;
+            justify-content: center;
+            align-items: center;
+            
+        }
+
+        div{
+            display: flex;
+            flex-direction: column;
+            margin-bottom: 1.6rem;
+        }
+
+        label{
+            color:rgb(153, 255, 58);
+            font-size: 1.2rem;
+        }
+
+        h2, #resultado{
+            color:rgb(153, 255, 58);
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <img src="imagens/investimento.png" alt="CDB/CDC">
+        <h1>Simulador de CDB e CDC</h1>
+    </header>
+    <form id="formulario" action="#">
+        <div>
+            <label for="">Valor de CDB </label>
+            <input id="valor_investido" type="number" step="0.01" placeholder="Valor investido R$">
+        </div>
+
+        <div>
+            <label for="">Taxa do CDB </label>
+            <input id="taxa_cdb"  type="number" step="0.01" placeholder="Taxa do CDB (entre 1% e 20%)">
+        </div>
+
+        <div>
+            <label for="">Ano de Saque</label>
+            <input id="ano_a_sacar"  type="number" placeholder="Ano de saque do valor investido (AAAA)">
+        </div>
+
+        <div>
+            <label for="">Taxa do CDC</label>
+            <input id="taxa_cdc"  type="number" step="0.01" placeholder="Taxa do CDC (entre 1% e 17%)">
+        </div>
+
+        <div id="botoes">
+            <input id="btn-calcular" onclick="clique_botao_calcular()" type="submit" value="Calcular">
+            <input type="reset" value="Limpar">
+        
+        </div>
+
+    </form>
+    
+    <h2>**** RESULTADO DA SIMULAÇÃO ****</h2>
+    <p id="resultado"></p>
+
+    <script>
+        function clique_botao_calcular(){
+            //Dados CDB
+            const valor_investido = obter_numero('valor_investido')
+            const taxa_cdb = obter_numero('taxa_cdb')
+            const ano_a_sacar = obter_numero('ano_a_sacar')
+            
+            //Calcular juros CDB
+            const tempo = calcular_tempo_anos(ano_a_sacar)
+            const montante_cdb = calcular_juros_compostos(valor_investido, taxa_cdb, tempo)
+            const juros_cdb = montante_cdb - valor_investido
+            const valor_a_sacar = valor_investido + juros_cdb
+            const rendimento_cdb = (juros_cdb / valor_investido) * 100
+
+            //Dados CDC
+            const taxa_cdc = obter_numero('taxa_cdc')
+            const valor_emprestado = valor_investido
+            const prazo_meses = calcular_tempo_meses(ano_a_sacar)
+
+            //Calcular juros CDC
+            const montante_cdc = calcular_juros_compostos(valor_emprestado, taxa_cdc, prazo_meses)
+            const juros_cdc = montante_cdc - valor_emprestado
+            const valor_a_pagar = valor_emprestado + juros_cdc
+            const rendimento_cdc = (juros_cdc / valor_emprestado) * 100
+            const parcela = valor_a_pagar / prazo_meses
+
+            const resultado = `\n>>>>>>>>>> RESULTADO CDB <<<<<<<<<<
+                    \n---> Valor investido inicialmente no CDB : R$ ${valor_investido.toFixed(2)}.
+                    \n---> Valor total investido no CDB somado aos juros obtidos: R$ ${valor_a_sacar.toFixed(2)}.
+                    \n---> Juros do CDB: R$ ${juros_cdb.toFixed(2)}.
+                    \n---> Rendimento do investimento (%): ${rendimento_cdb.toFixed(1)}%.
+                    \n-----------------------------
+                \n>>>>>>>>>> RESULTADO CDC <<<<<<<<<<
+                    \n---> Valor do empréstimo inicial no CDC : R$ ${valor_emprestado.toFixed(2)}.
+                    \n---> Valor total emprestado no CDC somado aos juros : R$ ${valor_a_pagar.toFixed(2)}.
+                    \n---> Juros do CDC : R$ ${juros_cdc.toFixed(2)}.
+                    \n---> Rendimento do empréstimo (%) : ${rendimento_cdc.toFixed(1)}%.
+                    \n---> Valor das parcelas : ${prazo_meses.toFixed(0)} x R$ ${parcela.toFixed(2)}.
+                    --------------------------------------------`
+            //alert(resultado)
+            const elemento_resultado = document.getElementById('resultado')
+            elemento_resultado.innerText = resultado
+
+        }
+
+        function calcular_tempo_anos(ano){
+            return ano - 2023
+        }
+
+        function calcular_tempo_meses(ano){
+            return (calcular_tempo_anos(ano) * 12)
+        }
+
+        function calcular_juros_compostos(capital, taxa, tempo){
+            return capital * ((1 + (taxa/100)) ** tempo)
+        }
+        
+        function obter_valor(elemento_id){
+            const elemento = document.getElementById(elemento_id)
+            const valor = elemento.value
+            return valor
+        }
+
+        function obter_numero(elemento_id){
+            return Number(obter_valor(elemento_id))
+        }
+
+        
+    </script>
+</body>
+</html>
