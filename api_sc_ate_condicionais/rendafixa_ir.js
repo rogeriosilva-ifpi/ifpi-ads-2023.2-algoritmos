@@ -14,7 +14,8 @@ function main(){
   const inflacao = getNumber('Inflação do Perído (%): ')
 
   // Quantidade de meses
-  const tempo_meses = calcular_meses_entre_datas(mes_investimento, ano_investimento, mes_realizacao, ano_realizacao)
+  const tempo_meses = calcular_meses_entre_datas(mes_investimento, ano_investimento, 
+                  mes_realizacao, ano_realizacao)
 
   if (tempo_meses === -1){
     console.log('Error nas data. Favor tente novamente')
@@ -52,10 +53,7 @@ function main(){
   Ganho Real		: R$ ${ganho_real_pos_inflacao.toFixed(2)} ou ${ganho_real_pos_inflacao_perc.toFixed(1)}% 
   —-------------------------------------
   `
-
   console.log(resultado)
-  
-
 }
 
 function calcular_meses_entre_datas(mes_investimento, ano_investimento, mes_realizacao, ano_realizacao){
