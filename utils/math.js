@@ -83,3 +83,34 @@ function tabuada_dividir(number){
   }
 }
 
+// Arrow Function
+export const is_even = number => number % 2 === 0
+
+/*
+// Arrow Function
+export const is_even = number => {return number % 2 === 0}
+
+// Regular Function
+export function is_even(number){
+  return number % 2 === 0
+}
+
+// Anonymous Function
+export const is_even = function(number){
+  return number % 2 === 0
+}*/
+
+export function is_prime(number){
+  let count_dividers = 0
+  let candidate = 1
+
+  while (candidate <= number){
+    if (number % candidate === 0){
+      count_dividers++
+    }
+    candidate++
+  }
+
+  return count_dividers === 2
+}
+

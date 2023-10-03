@@ -1,5 +1,9 @@
 import { question } from "readline-sync"
 
+export function get_text(label){
+  return question(label)
+}
+
 export function get_number(label){
   return Number(question(label))
 }
@@ -21,4 +25,17 @@ export function get_positive_number(label){
 
 export function print(text){
   console.log(text)
+}
+
+export function print_inline(text){
+  process.stdout.write(`${text}`)
+}
+
+export function clear_screen(){
+  console.clear()
+}
+
+export function enter_to_continue(){
+  get_text('<enter> to continue...')
+  clear_screen()
 }
