@@ -39,3 +39,7 @@ export function enter_to_continue(){
   get_text('<enter> to continue...')
   clear_screen()
 }
+
+export function dinheiro(valor){
+  return `R$ ${valor.toFixed(2)}`
+}

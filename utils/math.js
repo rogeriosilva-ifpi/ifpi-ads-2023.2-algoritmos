@@ -114,3 +114,7 @@ export function is_prime(number){
   return count_dividers === 2
 }
 
+export function porcentagem(valor, percentual){
+  return valor * (percentual/100)
+}
+
