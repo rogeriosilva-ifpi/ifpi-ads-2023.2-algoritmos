@@ -1,17 +1,16 @@
-import { question } from 'readline-sync'
 
 function main(){
-  const qtd = Number(question('Tamanho da Coleção: '))
-  const minimo = Number(question('Valor Mínimo: '))
-  const maximo = Number(question('Valor Máximo: '))
-  const numeros = gerar_colecao(qtd, maximo, minimo)
-
+  // const qtd = Number(question('Tamanho da Coleção: '))
+  // const minimo = Number(question('Valor Mínimo: '))
+  // const maximo = Number(question('Valor Máximo: '))
+  // const numeros = gerar_colecao(qtd, maximo, minimo)
+  const numeros = [8, 3, -2, 11, 5]
   mostrar_colecao(numeros)
 
   // pegar somente os negativos
   // const filtrados = filtrar(numeros, eh_negativo)
   // const filtrados = filtrar(numeros, eh_par)
-  let filtrados = filtrar(numeros, eh_par)
+  /*let filtrados = filtrar(numeros, eh_par)
   mostrar_colecao(filtrados)
 
   filtrados = filtrar(filtrados, eh_positivo)
@@ -25,10 +24,21 @@ function main(){
 
   convertidos = mapear(convertidos, item => item / 3)
   mostrar_colecao(convertidos)
+  
+  const somatorio = reduzir(convertidos, 0)
+  */
 
-  const somatorio = somar_valores(convertidos)
   // console.log(`Somatório  = ${somar_valores(mapear(filtrar(filtrar(numeros, eh_positivo), eh_impar), metade))}`)
-  console.log(`Somatório  = ${somatorio}`)
+  // const resultado = reduzir(numeros, somar, 0)
+  // const resultado = reduzir(numeros, subtrair, 100)
+  // const resultado = reduzir(numeros, (acc, atual) => acc * atual, 1)
+  // const resultado = somar_valores(numeros)
+  // const resultado = reduzir(numeros, maior_valor, -Infinity)
+  // const resultado = reduzir(numeros, menor, +Infinity)
+  // const resultado = reduzir(numeros, (acc, atual) => atual < acc ? atual : acc, +Infinity)
+  const resultado = reduzir(numeros, funcao, 1)
+  
+  console.log(`Resultado  = ${resultado}`)
 }
 
 function filtrar(vetor, criterio){
@@ -52,6 +62,22 @@ function mapear(vetor, conversor){
   return cestinha
 }
 
+function maior_valor(valor1, valor2){
+  if (valor1 > valor2){
+    return valor1
+  }
+  return valor2
+}
+
+function reduzir(vetor, operacao, valor_inicial){
+  let valor_reduzido = valor_inicial
+  for (let item of vetor){
+    valor_reduzido = operacao(valor_reduzido, item)
+  }
+
+  return valor_reduzido
+}
+
 function eh_negativo(numero){
   return numero < 0
 }
@@ -73,14 +99,37 @@ function metade(item){
   return novo_item
 }
 
+function somar(valor1, valor2){
+  return valor1 + valor2
+}
 
-function somar_valores(negativos){
+function subtrair(valor1, valor2){
+  return valor1 - valor2
+}
+
+function menor(valor1, valor2){
+  return valor1 < valor2 ? valor1 : valor2
+}
+
+
+function somar_valores(vetor){
+  // Tipo: REDUCE
   let somatorio = 0
-  for (let item of negativos){
+  for (let item of vetor){
     somatorio = somatorio + item
   }
 
   return somatorio
+}
+
+function media_valores(vetor){
+  // Tipo: REDUCE
+  let media = vetor[0]
+  for (let item of vetor){
+    media = (media + item) / 2
+  }
+
+  return media 
 }
 
 function gerar_colecao(qtd, maximo, minimo){
