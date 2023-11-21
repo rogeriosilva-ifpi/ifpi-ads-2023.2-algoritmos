@@ -41,7 +41,7 @@ function main(){
   console.log(`Resultado  = ${resultado}`)
 }
 
-function filtrar(vetor, criterio){
+export function filtrar(vetor, criterio){
   const cestinha = []
   for(let item of vetor){
     if (criterio(item)){
@@ -52,7 +52,7 @@ function filtrar(vetor, criterio){
   return cestinha
 }
 
-function mapear(vetor, conversor){
+export function mapear(vetor, conversor){
   const cestinha = []
   for (let item of vetor){
     const item_convertido = conversor(item)
@@ -156,4 +156,4 @@ function mostrar_colecao(vetor){
   console.log(`|----- ${vetor.length} itens -----|`)
 }
 
-main()
+// main()
